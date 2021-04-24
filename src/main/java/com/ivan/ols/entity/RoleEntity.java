@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author ivans
  */
-@Entity(name = "Role")
+@Entity(name = "role")
 public class RoleEntity implements Serializable {
 
     /**
@@ -26,8 +26,9 @@ public class RoleEntity implements Serializable {
     private static final long serialVersionUID = 6353963609310956029L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GenericGenerator(name = "native", strategy = "native")
+    @Column(name="role_id")
     private Long id;
 
     @Column

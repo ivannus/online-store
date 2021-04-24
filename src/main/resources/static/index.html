@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--html lang="en"-->
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <title>JITech</title>
         <meta charset="utf-8">
@@ -53,7 +53,13 @@
                         <li><a href="#">Contact</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/customer/account"><span class="glyphicon glyphicon-user"></span> Your Account</a></li>
+                        <li>
+                            <a href="/account">
+                                <span class="glyphicon glyphicon-user" >
+                                </span>
+                                Your Account
+                            </a>
+                        </li>
                         <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
                     </ul>
                 </div>

@@ -22,7 +22,7 @@
                             <h2>Log In</h2>
                         </div>
                         <div class="row">
-                            <form control="" class="form-group" th:action="@{/customer/account}" method="post">
+                            <form control="" class="form-group" th:action="@{/account}" method="post">
 
                                 <legend>Identifícate</legend>
                                 <div th:if="${param.error}" class="alert alert-error">
@@ -33,7 +33,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <input type="email" name="email" id="username" class="form__input" placeholder="Email">
+                                    <input type="email" name="emailId" id="username" class="form__input" placeholder="Email">
                                 </div>
                                 <div class="row">
                                     <!-- <span class="fa fa-lock"></span> -->
@@ -49,7 +49,7 @@
                             </form>
                         </div>
                         <div class="row">
-                            <p>No tengo una cuenta<a href="/customer/new/account"> Registrate aquí </a></p>
+                            <p>No tengo una cuenta<a href="/signup"> Registrate aquí </a></p>
                         </div>
                     </div>
                 </div>

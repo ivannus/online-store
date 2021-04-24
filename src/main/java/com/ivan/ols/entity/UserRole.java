@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ivan.ols.service;
+package com.ivan.ols.entity;
 
 /**
  *
  * @author ivans
  */
-public class CustomerService {
-    
+public enum UserRole {
+    ROLE_ADMINISTRATOR,ROLE_USER;
 }

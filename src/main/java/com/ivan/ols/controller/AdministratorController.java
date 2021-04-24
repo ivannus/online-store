@@ -5,7 +5,6 @@
  */
 package com.ivan.ols.controller;
 
-import com.ivan.ols.common.GenericService;
 //import com.ivan.ols.dto.UserGenericDTO;
 import com.ivan.ols.entity.Administrator;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -6,15 +6,16 @@
 package com.ivan.ols.service;
 
 import com.ivan.ols.dto.ChangePasswordForm;
+import com.ivan.ols.entity.ConfirmationToken;
 import com.ivan.ols.entity.UserEntity;
+import com.ivan.ols.repository.ConfirmationTokenRepository;
 import com.ivan.ols.repository.UserRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -24,11 +25,13 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository repository;
-    
+    UserRepository userRepository;
+
+    /*@Autowired
+    private ConfirmationTokenRepository confirmationTokenRepository;*/
+
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    //Crea el encriptador de contraseñas	
     public BCryptPasswordEncoder passwordEncoder() {
         bCryptPasswordEncoder = new BCryptPasswordEncoder(15);
         //El numero 4 representa que tan fuerte quieres la encriptacion.
@@ -38,105 +41,76 @@ public class UserServiceImpl implements UserService {
         return bCryptPasswordEncoder;
     }
 
-    @Override
-    public Iterable<UserEntity> getAllUsers() {
-        return repository.findAll();
-    }
-
-    private boolean checkUsernameAvailable(UserEntity user) throws Exception {
-        Optional<UserEntity> userFound = repository.findByUsername(user.getEmail());
-        if (userFound.isPresent()) {
-            throw new Exception("Username no disponible");
+    private boolean checkUsernameAvailable(ModelAndView modelAndView, UserEntity user) {
+        UserEntity userFound = userRepository.findByEmailIdIgnoreCase(user.getEmailId());
+        if (userFound != null) {
+            modelAndView.addObject("message", "This email already exists!");
+            modelAndView.setViewName("error");
         }
         return true;
     }
 
-    private boolean checkPasswordValid(UserEntity user) throws Exception {
+    private boolean checkPasswordValid(ModelAndView modelAndView, UserEntity user) {
         if (user.getConfirmPassword() == null || user.getConfirmPassword().isEmpty()) {
-            throw new Exception("Confirm Password es obligatorio");
+            //throw new Exception("Confirm Password es obligatorio");
+            modelAndView.addObject("message", "Confirm Password es obligatorio");
+            modelAndView.setViewName("error");
         }
 
         if (!user.getPassword().equals(user.getConfirmPassword())) {
-            throw new Exception("Password y Confirm Password no son iguales");
+            //throw new Exception("Password y Confirm Password no son iguales");
+            modelAndView.addObject("message", "Password y Confirm Password no son iguales");
+            modelAndView.setViewName("error");
         }
         return true;
     }
 
     @Override
-    public UserEntity createUser(UserEntity user) throws Exception {
-        if (checkUsernameAvailable(user) && checkPasswordValid(user)) {
+    public UserEntity createUser(ModelAndView modelAndView, UserEntity user) {
+        if (checkUsernameAvailable(modelAndView, user) && checkPasswordValid(modelAndView, user)) {
             String encodePassword = passwordEncoder().encode(user.getPassword());
             user.setPassword(encodePassword);
-            user = repository.save(user);
+            user = userRepository.save(user);
         }
+        return user;
+    }
+    
+    @Override
+    public UserEntity getTokenUser(ConfirmationToken token) {
+        UserEntity user = userRepository.findByEmailIdIgnoreCase(token.getUser().getEmailId());
         return user;
     }
 
     @Override
+    public Iterable<UserEntity> getAllUsers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public UserEntity getUserById(Long id) throws Exception {
-        return repository.findById(id).orElseThrow(() -> new Exception("El usuario no existe."));
+        Optional<UserEntity> userOption = userRepository.findById(id);
+        UserEntity user = userOption.get();
+        return user;
     }
 
     @Override
-    public UserEntity updateUser(UserEntity fromUser) throws Exception {
-        UserEntity toUser = getUserById(fromUser.getId());
-        mapUser(fromUser, toUser);
-        return repository.save(toUser);
-    }
-
-    /**
-     * Map everythin but the password.
-     *
-     * @param from
-     * @param to
-     */
-    protected void mapUser(UserEntity from, UserEntity to) {
-        to.setEmail(from.getEmail());
-        to.setName(from.getName());
-        to.setLastName(from.getLastName());
-        to.setMotherLastName(from.getMotherLastName());
-        to.setRoles(from.getRoles());
+    public UserEntity getUserByEmailId(String emailId) throws Exception {
+        return userRepository.findByEmailIdIgnoreCase(emailId);
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public UserEntity updateUser(UserEntity user) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public void deleteUser(Long id) throws Exception {
-        UserEntity user = getUserById(id);
-        repository.delete(user);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public UserEntity changePassword(ChangePasswordForm form) throws Exception {
-        UserEntity user = getUserById(form.getId());
-
-        if (!isLoggedUserADMIN() && !user.getPassword().equals(form.getCurrentPassword())) {
-            throw new Exception("Current Password invalido.");
-        }
-
-        if (user.getPassword().equals(form.getNewPassword())) {
-            throw new Exception("Nuevo debe ser diferente al password actual.");
-        }
-
-        if (!form.getNewPassword().equals(form.getConfirmPassword())) {
-            throw new Exception("Nuevo Password y Current Password no coinciden.");
-        }
-        
-        String encodePassword = passwordEncoder().encode(form.getNewPassword());
-        user.setPassword(encodePassword);
-        return repository.save(user);
-    }
-
-    private boolean isLoggedUserADMIN() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails loggedUser = null;
-        if (principal instanceof UserDetails) {
-            loggedUser = (UserDetails) principal;
-
-            loggedUser.getAuthorities().stream()
-                    .filter(x -> "ADMIN".equals(x.getAuthority()))
-                    .findFirst().orElse(null); //loggedUser = null;
-        }
-        return loggedUser != null ? true : false;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

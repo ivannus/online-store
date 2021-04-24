@@ -23,8 +23,8 @@ public class UserModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="user_id",nullable = false)
     private Long id;
     @Column(nullable = false)
     @NotBlank
@@ -47,7 +47,7 @@ public class UserModel implements Serializable {
     @Column(nullable = false, unique = true)
     @NotBlank
     @Email
-    private String email;
+    private String emailId;
     @Column(nullable = false)
     @NotBlank
     private String password;
@@ -63,7 +63,7 @@ public class UserModel implements Serializable {
         this.dateBirth = dateBirth;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
-        this.email = email;
+        this.emailId = email;
         this.password = password;
     }
 
@@ -123,12 +123,12 @@ public class UserModel implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailId() {
+        return emailId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailId(String email) {
+        this.emailId = email;
     }
 
     public String getPassword() {
@@ -149,7 +149,7 @@ public class UserModel implements Serializable {
         System.out.println("Fecha Nacimiento: " + dateBirth);
         System.out.println("Genero: " + gender);
         System.out.println("Numero Telefono: " + phoneNumber);
-        System.out.println("Email: " + email);
+        System.out.println("Email: " + emailId);
         System.out.println("Contraseña: " + password);
     }
     

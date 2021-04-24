@@ -5,7 +5,7 @@
  */
 package com.ivan.ols.security;
 
-import com.ivan.ols.repository.CustomerRepository;
+import com.ivan.ols.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,10 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.sql.DataSource;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  *
@@ -29,7 +26,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Autowired
-    UserDetailsService userDetailsService;
+    UserDetailsServiceImpl userDetailsService;
     
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -38,10 +35,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         "/include/**", "/css/**", "/jitech/**", "/icons/**", "/img/**", "/js/**", "/layer/**"
     };
 
-    String[] endPoints = new String[]{
+    String[] userEndPoints = new String[]{
         //"/include/**","/css/**","/icons/**","/img/**","/js/**","/layer/**"
         //"/", "/customer/new/account", "/customer/register"
-        "/", "/customer/register"
+        "/", "/signup", "/create/account", "/confirm-account"
     };
 
     /*@Autowired
@@ -52,21 +49,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(endPoints).permitAll()
-                //.antMatchers("/customer/login").permitAll()
+                .antMatchers(userEndPoints).permitAll()
+                //.antMatchers("/verify-account").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/customer/account").permitAll()
-                .defaultSuccessUrl("/customer/index", true)
-                //.failureUrl("/login?error=true")
-                .failureUrl("/customer/new/account")
+                .loginPage("/account").permitAll()
+                .usernameParameter("emailId")
+                .defaultSuccessUrl("/", true);
+                /*.failureUrl("/login?error=true")
+                //.failureUrl("/customer/new/account")
+                .failureUrl("/account")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and()
                 .logout()
                 .permitAll()
-                .logoutSuccessUrl("/login?logout");
+                .logoutSuccessUrl("/login?logout");*/
 
     }
 
@@ -92,6 +91,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Setting Service to find User in the database.
         // And Setting PassswordEncoder
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());/*.getUserDetailsService();*/
     }
 }

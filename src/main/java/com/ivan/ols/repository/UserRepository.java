@@ -10,14 +10,8 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-
-/**
- *
- * @author ivans
- */
+//@Repository("userRepository")
 @Repository
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
-    
-    public Optional<UserEntity> findByUsername(String email);
-    
+    UserEntity findByEmailIdIgnoreCase(String emailId);
 }
