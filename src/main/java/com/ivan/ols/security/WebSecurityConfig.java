@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/account").permitAll()
                 .usernameParameter("emailId")
-                .defaultSuccessUrl("/", true);
+                .defaultSuccessUrl("/index", true);
                 /*.failureUrl("/login?error=true")
                 //.failureUrl("/customer/new/account")
                 .failureUrl("/account")
@@ -91,6 +91,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Setting Service to find User in the database.
         // And Setting PassswordEncoder
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());/*.getUserDetailsService();*/
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 }

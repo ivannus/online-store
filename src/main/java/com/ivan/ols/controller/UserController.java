@@ -13,8 +13,11 @@ import com.ivan.ols.service.EmailSenderService;
 import com.ivan.ols.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,10 +49,15 @@ public class UserController {
         return modelAndView;
     }
 
-    @RequestMapping("/index")
-    public ModelAndView index(ModelAndView modelAndView) {
-        modelAndView.setViewName("redirect:/");
-        return modelAndView;
+    //@RequestMapping("/index")
+    @GetMapping("/index")
+    public String index(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication(); 
+        String user = auth.getName(); //get logged in username
+        System.out.println("SEEEEEEEEEEEEEEEEEEEEEEEEEEMOOOOONN: " + user);
+        //ModelAndView modelAndView = new ModelAndView();
+        model.addAttribute("usuario", user);
+        return "redirect:/";
     }
 
     @RequestMapping("/signup")
@@ -73,7 +81,7 @@ public class UserController {
         mailMessage.setFrom("JITech@gmail.com");
         mailMessage.setText("To confirm your account, please click here : "
                 //+ "http://localhost:8880/confirm-account?token=" + confirmationToken.getConfirmationToken());
-                + "https://isc-java.herokuapp.com/confirm-account?token=" + confirmationToken.getConfirmationToken());
+                + "https://isc-java.herokuapp.com*/confirm-account?token=" + confirmationToken.getConfirmationToken());
 
         emailSenderService.sendEmail(mailMessage);
 
