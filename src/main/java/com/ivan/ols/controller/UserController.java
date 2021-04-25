@@ -11,6 +11,8 @@ import com.ivan.ols.repository.ConfirmationTokenRepository;
 import com.ivan.ols.repository.UserRepository;
 import com.ivan.ols.service.EmailSenderService;
 import com.ivan.ols.service.UserService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
@@ -51,13 +53,19 @@ public class UserController {
 
     //@RequestMapping("/index")
     @GetMapping("/index")
-    public String index(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication(); 
-        String user = auth.getName(); //get logged in username
-        System.out.println("SEEEEEEEEEEEEEEEEEEEEEEEEEEMOOOOONN: " + user);
-        //ModelAndView modelAndView = new ModelAndView();
-        model.addAttribute("usuario", user);
-        return "redirect:/";
+    public ModelAndView index(ModelAndView modelAndView) {
+        try {
+            //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            //String user = auth.getName(); //get logged in username
+            String userName = userService.getUserByEmailId(SecurityContextHolder.getContext().getAuthentication().getName()).getName();
+            modelAndView.addObject("name", userName);
+            modelAndView.setViewName("index");
+        } catch (Exception ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            modelAndView.addObject("message", "User name not found!");
+            modelAndView.setViewName("error");
+        }
+        return modelAndView;
     }
 
     @RequestMapping("/signup")
@@ -81,7 +89,7 @@ public class UserController {
         mailMessage.setFrom("JITech@gmail.com");
         mailMessage.setText("To confirm your account, please click here : "
                 //+ "http://localhost:8880/confirm-account?token=" + confirmationToken.getConfirmationToken());
-                + "https://isc-java.herokuapp.com*/confirm-account?token=" + confirmationToken.getConfirmationToken());
+                + "https://isc-java.herokuapp.com/confirm-account?token=" + confirmationToken.getConfirmationToken());
 
         emailSenderService.sendEmail(mailMessage);
 
