@@ -15,7 +15,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,8 +87,8 @@ public class UserController {
         mailMessage.setSubject("Complete Registration!");
         mailMessage.setFrom("JITech@gmail.com");
         mailMessage.setText("To confirm your account, please click here : "
-                //+ "http://localhost:8880/confirm-account?token=" + confirmationToken.getConfirmationToken());
-                + "https://isc-java.herokuapp.com/confirm-account?token=" + confirmationToken.getConfirmationToken());
+                + "http://localhost:8880/confirm-account?token=" + confirmationToken.getConfirmationToken());
+                //+ "https://isc-java.herokuapp.com/confirm-account?token=" + confirmationToken.getConfirmationToken());
 
         emailSenderService.sendEmail(mailMessage);
 
