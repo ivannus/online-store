@@ -40,6 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //"/", "/customer/new/account", "/customer/register"
         "/", "/signup", "/create/account", "/confirm-account"
     };
+    
+    String[] userCustomerEndPoints = new String[]{
+        //"/include/**","/css/**","/icons/**","/img/**","/js/**","/layer/**"
+        //"/", "/customer/new/account", "/customer/register"
+        "/", "/signup", "/create/account", "/confirm-account"
+    };
 
     /*@Autowired
     private DataSource dataSource;*/
@@ -56,6 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/account").permitAll()
                 .usernameParameter("emailId")
+                .passwordParameter("password")
                 .defaultSuccessUrl("/index", true);
                 /*.failureUrl("/login?error=true")
                 //.failureUrl("/customer/new/account")

@@ -8,7 +8,8 @@ package com.ivan.ols.service;
 import com.ivan.ols.entity.Authority;
 import com.ivan.ols.entity.RoleEntity;
 import com.ivan.ols.entity.UserEntity;
-import static com.ivan.ols.entity.UserRole.ROLE_USER;
+import com.ivan.ols.model.UserRole;
+import static com.ivan.ols.model.UserRole.ROLE_USER;
 import com.ivan.ols.repository.UserRepository;
 import java.util.HashSet;
 import java.util.List;
@@ -36,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         //Buscar el usuario con el repositorio y si no existe lanzar una exepcion
-        UserEntity appUser = userRepository.findByEmailIdIgnoreCase(email);
+        UserEntity appUser = userRepository.findByEmailIdIgnoreCase(email); 
         if (appUser.isEnabled()) {
             Set<GrantedAuthority> grantList = new HashSet<>();
         

@@ -10,5 +10,8 @@
             <goal>jasypt:encrypt</goal>
             <goal>install</goal>
         </goals>
+        <properties>
+                <jasypt.encryptor.password>onlinestore</jasypt.encryptor.password>
+            </properties>
     </action>
 </actions>

@@ -6,8 +6,11 @@
 package com.ivan.ols.entity;
 
 import com.ivan.ols.model.UserModel;
+import com.ivan.ols.model.UserRole;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -16,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  *
@@ -28,6 +32,10 @@ public class UserEntity extends UserModel {
     private String confirmPassword;
     
     private boolean isEnabled;
+    
+    /*@Column
+    @ElementCollection(targetClass=String.class)
+    private List<GrantedAuthority> userRole;*/
     
     /*@Size(min = 1)
     @ManyToMany(fetch = FetchType.LAZY)
@@ -65,6 +73,7 @@ public class UserEntity extends UserModel {
 
     @Override
     public void getDetailsUser() {
-        super.getDetailsUser();
+        getDetailsUser();
     }
+
 }

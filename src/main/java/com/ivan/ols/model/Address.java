@@ -8,6 +8,7 @@ package com.ivan.ols.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotBlank;
 
 /**
  *
@@ -15,19 +16,26 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class Address implements Serializable {
-    @Column(nullable = false)
+    @Column
+    @NotBlank
     private String street;
-    @Column(nullable = false)
+    @Column
+    @NotBlank
     private String streetNumber;
-    @Column(nullable = true)
+    @Column
+    @NotBlank
     private String apartmentNumber;
-    @Column(nullable = false)
+    @Column
+    @NotBlank
     private String locality;
-    @Column(nullable = false)
+    @Column
+    @NotBlank
     private String city;
-    @Column(nullable = false)
+    @Column
+    @NotBlank
     private String country;
-    @Column(nullable = false)
+    @Column
+    @NotBlank
     private String zip;
 
     public Address() {

@@ -8,11 +8,17 @@ package com.ivan.ols.service;
 import com.ivan.ols.dto.ChangePasswordForm;
 import com.ivan.ols.entity.ConfirmationToken;
 import com.ivan.ols.entity.UserEntity;
+import com.ivan.ols.model.UserRole;
+import static com.ivan.ols.model.UserRole.ROLE_USER;
 import com.ivan.ols.repository.ConfirmationTokenRepository;
 import com.ivan.ols.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -100,7 +106,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity updateUser(UserEntity user) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return userRepository.save(user);
     }
 
     @Override

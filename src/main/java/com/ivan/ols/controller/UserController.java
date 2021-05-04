@@ -7,8 +7,7 @@ package com.ivan.ols.controller;
 
 import com.ivan.ols.entity.ConfirmationToken;
 import com.ivan.ols.entity.UserEntity;
-import com.ivan.ols.repository.ConfirmationTokenRepository;
-import com.ivan.ols.repository.UserRepository;
+import com.ivan.ols.service.ConfirmationTokenService;
 import com.ivan.ols.service.EmailSenderService;
 import com.ivan.ols.service.UserService;
 import java.util.logging.Level;
@@ -31,31 +30,25 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class UserController {
-
+    
     @Autowired
-    private UserRepository userRepository;
-
+    UserService userService;
+    
     @Autowired
-    private ConfirmationTokenRepository confirmationTokenRepository;
+    ConfirmationTokenService confirmationTokenService;
 
     @Autowired
     private EmailSenderService emailSenderService;
-
-    @Autowired
-    UserService userService;
     
     @RequestMapping("/account")
     public ModelAndView showLoginForm(ModelAndView modelAndView) {
         modelAndView.setViewName("login");
         return modelAndView;
     }
-
-    //@RequestMapping("/index")
+    
     @GetMapping("/index")
     public ModelAndView index(ModelAndView modelAndView) {
         try {
-            //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            //String user = auth.getName(); //get logged in username
             String userName = userService.getUserByEmailId(SecurityContextHolder.getContext().getAuthentication().getName()).getName();
             modelAndView.addObject("name", userName);
             modelAndView.setViewName("index");
@@ -74,13 +67,14 @@ public class UserController {
     }
 
     @PostMapping("/create/account")
-    public ModelAndView createAccount(ModelAndView modelAndView, UserEntity user) /*throws Exception*/ {
+    public ModelAndView createAccount(ModelAndView modelAndView, UserEntity user) {
         System.out.println("#######################################################################################");
 
         userService.createUser(modelAndView, user);
+        
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
-
-        confirmationTokenRepository.save(confirmationToken);
+        
+        confirmationTokenService.createToken(confirmationToken);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmailId());
@@ -101,12 +95,12 @@ public class UserController {
 
     @RequestMapping(value = "/confirm-account", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView confirmUserAccount(ModelAndView modelAndView, @RequestParam("token") String confirmationToken) throws Exception {
-        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+        ConfirmationToken token = confirmationTokenService.findByConfirmationToken(confirmationToken);
 
         if (token != null) {
             UserEntity user = userService.getTokenUser(token);
             user.setEnabled(true);
-            userRepository.save(user);
+            userService.updateUser(user);
             modelAndView.setViewName("accountVerified");
         } else {
             modelAndView.addObject("message", "The link is invalid or broken!");
@@ -115,29 +109,5 @@ public class UserController {
 
         return modelAndView;
     }
-
-    public UserRepository getUserRepository() {
-        return userRepository;
-    }
-
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public ConfirmationTokenRepository getConfirmationTokenRepository() {
-        return confirmationTokenRepository;
-    }
-
-    public void setConfirmationTokenRepository(ConfirmationTokenRepository confirmationTokenRepository) {
-        this.confirmationTokenRepository = confirmationTokenRepository;
-    }
-
-    public EmailSenderService getEmailSenderService() {
-        return emailSenderService;
-    }
-
-    public void setEmailSenderService(EmailSenderService emailSenderService) {
-        this.emailSenderService = emailSenderService;
-    }
-
+    
 }
