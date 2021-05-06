@@ -1,0 +1,15 @@
+nav {
+    height: 50px;
+}
+
+.main {
+    min-height: calc(100vh - 50px - 50px);
+}
+
+.main .row {
+    margin: 20px auto;
+}
+
+footer {
+    height: 50px;
+}

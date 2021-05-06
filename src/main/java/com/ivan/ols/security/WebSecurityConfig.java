@@ -42,9 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     };
     
     String[] userCustomerEndPoints = new String[]{
-        //"/include/**","/css/**","/icons/**","/img/**","/js/**","/layer/**"
-        //"/", "/customer/new/account", "/customer/register"
-        "/", "/signup", "/create/account", "/confirm-account"
+        "/customer/product"
     };
 
     /*@Autowired
@@ -56,23 +54,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(userEndPoints).permitAll()
-                //.antMatchers("/verify-account").permitAll()
+                .antMatchers(userCustomerEndPoints).hasAnyRole("USER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/account").permitAll()
+                //.usernameParameter("emailId")
+                //.passwordParameter("password")
+                .defaultSuccessUrl("/index", true)
+                //.failureUrl("/login?error=true")
+                //.failureUrl("/login?error")
                 .usernameParameter("emailId")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/index", true);
-                /*.failureUrl("/login?error=true")
-                //.failureUrl("/customer/new/account")
-                .failureUrl("/account")
-                .usernameParameter("email")
                 .passwordParameter("password")
                 .and()
                 .logout()
                 .permitAll()
-                .logoutSuccessUrl("/login?logout");*/
+                .logoutSuccessUrl("/");
 
     }
 

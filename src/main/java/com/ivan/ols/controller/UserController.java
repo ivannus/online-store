@@ -81,8 +81,8 @@ public class UserController {
         mailMessage.setSubject("Complete Registration!");
         mailMessage.setFrom("JITech@gmail.com");
         mailMessage.setText("To confirm your account, please click here : "
-                + "http://localhost:8880/confirm-account?token=" + confirmationToken.getConfirmationToken());
-                //+ "https://isc-java.herokuapp.com/confirm-account?token=" + confirmationToken.getConfirmationToken());
+                //+ "http://localhost:8880/confirm-account?token=" + confirmationToken.getConfirmationToken());
+                + "https://isc-java.herokuapp.com/confirm-account?token=" + confirmationToken.getConfirmationToken());
 
         emailSenderService.sendEmail(mailMessage);
 
