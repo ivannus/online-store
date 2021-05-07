@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     };
     
     String[] userCustomerEndPoints = new String[]{
-        "/customer/product"
+        "/customer/product", "/profile"
     };
 
     /*@Autowired

@@ -41,13 +41,13 @@ public class UserController {
     private EmailSenderService emailSenderService;
     
     @RequestMapping("/account")
-    public ModelAndView showLoginForm(ModelAndView modelAndView) {
+    public ModelAndView ShowLoginForm(ModelAndView modelAndView) {
         modelAndView.setViewName("login");
         return modelAndView;
     }
     
     @GetMapping("/index")
-    public ModelAndView index(ModelAndView modelAndView) {
+    public ModelAndView Index(ModelAndView modelAndView) {
         try {
             String userName = userService.getUserByEmailId(SecurityContextHolder.getContext().getAuthentication().getName()).getName();
             modelAndView.addObject("name", userName);
@@ -61,13 +61,13 @@ public class UserController {
     }
 
     @RequestMapping("/signup")
-    public String showSignupForm(Model model) {
+    public String ShowSignupForm(Model model) {
         model.addAttribute("user", new UserEntity());
         return "signup";
     }
 
     @PostMapping("/create/account")
-    public ModelAndView createAccount(ModelAndView modelAndView, UserEntity user) {
+    public ModelAndView CreateAccount(ModelAndView modelAndView, UserEntity user) {
         System.out.println("#######################################################################################");
 
         userService.createUser(modelAndView, user);
@@ -94,7 +94,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/confirm-account", method = {RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView confirmUserAccount(ModelAndView modelAndView, @RequestParam("token") String confirmationToken) throws Exception {
+    public ModelAndView ConfirmUserAccount(ModelAndView modelAndView, @RequestParam("token") String confirmationToken) throws Exception {
         ConfirmationToken token = confirmationTokenService.findByConfirmationToken(confirmationToken);
 
         if (token != null) {
@@ -107,6 +107,49 @@ public class UserController {
             modelAndView.setViewName("error");
         }
 
+        return modelAndView;
+    }
+    
+    @GetMapping("/profile")
+    public ModelAndView UserProfile(ModelAndView modelAndView){
+        try {
+            UserEntity userProfile = userService.getUserByEmailId(SecurityContextHolder.getContext().getAuthentication().getName());
+            modelAndView.addObject("name", userProfile.getName());
+            modelAndView.addObject("userProfile", userProfile);
+            modelAndView.setViewName("profile");
+        } catch (Exception ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            modelAndView.addObject("message", "Profile User not found!");
+            modelAndView.setViewName("error");
+        }
+        return modelAndView;
+    }
+    
+    @GetMapping("/car")
+    public ModelAndView UserCar(ModelAndView modelAndView){
+        try {
+            UserEntity userProfile = userService.getUserByEmailId(SecurityContextHolder.getContext().getAuthentication().getName());
+            modelAndView.addObject("name", userProfile.getName());
+            modelAndView.setViewName("carrito");
+        } catch (Exception ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            modelAndView.addObject("message", "Profile User not found!");
+            modelAndView.setViewName("error");
+        }
+        return modelAndView;
+    }
+    
+    @GetMapping("/purchase")
+    public ModelAndView UserPurchase(ModelAndView modelAndView){
+        try {
+            UserEntity userProfile = userService.getUserByEmailId(SecurityContextHolder.getContext().getAuthentication().getName());
+            modelAndView.addObject("name", userProfile.getName());
+            modelAndView.setViewName("direccion-envio");
+        } catch (Exception ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            modelAndView.addObject("message", "Profile User not found!");
+            modelAndView.setViewName("error");
+        }
         return modelAndView;
     }
     
