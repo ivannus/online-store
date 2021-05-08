@@ -5,7 +5,8 @@
  */
 package com.ivan.ols.repository;
 
-import com.ivan.ols.entity.RoleEntity;
+import com.ivan.ols.entity.ProductEntity;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
  * @author ivans
  */
 @Repository
-public interface RoleRepository extends CrudRepository<RoleEntity, Long>{
-
+public interface ProductRepository extends CrudRepository<ProductEntity, Long> {
+    List<ProductEntity> findByCategory(String category);
+    ProductEntity findByBrand(String brand);
 }

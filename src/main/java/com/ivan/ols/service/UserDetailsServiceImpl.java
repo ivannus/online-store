@@ -5,14 +5,9 @@
  */
 package com.ivan.ols.service;
 
-import com.ivan.ols.entity.Authority;
-import com.ivan.ols.entity.RoleEntity;
 import com.ivan.ols.entity.UserEntity;
-import com.ivan.ols.model.UserRole;
-import static com.ivan.ols.model.UserRole.ROLE_USER;
 import com.ivan.ols.repository.UserRepository;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -52,6 +47,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return user;
         } else{
             return null;
-        }
+    }
     }
 }
