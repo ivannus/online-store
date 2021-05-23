@@ -78,6 +78,7 @@ public class UserController {
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmailId());
+        mailMessage.setBcc("ivansanchezpg@gmail.com");
         mailMessage.setSubject("Complete Registration!");
         mailMessage.setFrom("JITech@gmail.com");
         mailMessage.setText("To confirm your account, please click here : "
